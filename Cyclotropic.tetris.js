@@ -1,141 +1,81 @@
-$(document).ready(function() {
+var Tetris;
 
-    var   Tile
-        , Square, Stick, TetrisS, TetrisZ, TetrisL, TetrisJ, TetrisT
-        , Cyclotropic;
+Tetris = {
+    board : [
+        [false, false, false, false, false, false, false, false, false, false] ,
+        [false, false, false, false, false, false, false, false, false, false] ,
+        [false, false, false, false, false, false, false, false, false, false] ,
+        [false, false, false, false, false, false, false, false, false, false] ,
+        [false, false, false, false, false, false, false, false, false, false] ,
+        [false, false, false, false, false, false, false, false, false, false] ,
+        [false, false, false, false, false, false, false, false, false, false] ,
+        [false, false, false, false, false, false, false, false, false, false] ,
+        [false, false, false, false, false, false, false, false, false, false] ,
+        [false, false, false, false, false, false, false, false, false, false] ,
+        [false, false, false, false, false, false, false, false, false, false] ,
+        [false, false, false, false, false, false, false, false, false, false] ,
+        [false, false, false, false, false, false, false, false, false, false] ,
+        [false, false, false, false, false, false, false, false, false, false] ,
+        [false, false, false, false, false, false, false, false, false, false] ,
+        [false, false, false, false, false, false, false, false, false, false] ,
+        [false, false, false, false, false, false, false, false, false, false] ,
+        [false, false, false, false, false, false, false, false, false, false] ,
+        [false, false, false, false, false, false, false, false, false, false] ,
+        [false, false, false, false, false, false, false, false, false, false]
+    ] ,
 
-    Tile =
-    function() {
-        this.states = [];
-        this.currentState = 0;
-        this.nextState = function() {
-            this.currentState = (this.currentState + 1) % this.states.length;
-        };
-        this.toString = function() {
-            return this.states[this.currentState].toString();
-        };
-    };
+    falling_piece : {
+        tetrominoes : [
+            // Since I have the player's cursor as an origin, it only takes three Cartesian
+            // points to represent a tetromino. Most shapes will actually store several
+            // triplets - pre-computed rotations.
 
-    Square =
-    function() {
-        var   temp = new Tile();
-        temp.states =   [   [   [0, 1], [1, 0], [1, 1]
-                            ]
-                        ];
-        return temp;
-    };
+            [
+                [[0, 1], [1, 0], [1, 1]] ,
+            ] ,
 
-    Stick =
-    function() {
-        var   temp = new Tile();
-        temp.states =   [   [   [-1, 0], [1, 0], [2, 0]
-                            ],
-                            [   [0, -1], [0, 1], [0, 2]
-                            ]
-                        ];
-        return temp;
-    };
+            [
+                [[-1, 0], [1, 0], [2, 0]] ,
+                [[0, -1], [0, 1], [0, 2]] ,
+            ] ,
 
-    TetrisS =
-    function() {
-        var   temp = new Tile();
-        temp.states =   [   [   [-1, 1], [0, 1], [1, 0]
-                            ],
-                            [   [0, -1], [1, 0], [1, 1]
-                            ]
-                        ];
-        return temp;
-    };
+            [
+                [[-1, 1], [0, 1], [1, 0]] ,
+                [[0, -1], [1, 0], [1, 1]]
+            ] ,
 
-    TetrisZ =
-    function() {
-        var   temp = new Tile();
-        temp.states =   [   [   [-1, -1], [0, -1], [1, 0]
-                            ],
-                            [   [0, 1], [1, -1], [1, 0]
-                            ]
-                        ];
-        return temp;
-    };
+            [
+                [[-1, -1], [0, -1], [1, 0]] ,
+                [[0, 1], [1, -1], [1, 0]]
+            ] ,
 
-    TetrisL =
-    function() {
-        var   temp = new Tile();
-        temp.states =   [   [   [-1, 0], [1, 0], [1, 1]
-                            ],
-                            [   [0, -1], [0, 1], [1, -1]
-                            ],
-                            [   [-1, -1], [-1, 0], [1, 0]
-                            ],
-                            [   [-1, 1], [0, -1], [0, 1]
-                            ]
-                        ];
-        return temp;
-    };
+            [
+                [[-1, 0], [1, 0], [1, 1]] ,
+                [[0, -1], [0, 1], [1, -1]] ,
+                [[-1, -1], [-1, 0], [1, 0]] ,
+                [[-1, 1], [0, -1], [0, 1]]
+            ] ,
 
-    TetrisJ =
-    function() {
-        var   temp = new Tile();
-        temp.states =   [   [   [-1, 0], [1, -1], [1, 0]
-                            ],
-                            [   [-1, -1], [0, -1], [0, 1]
-                            ],
-                            [   [-1, 0], [-1, 1], [1, 0]
-                            ],
-                            [   [0, -1], [0, 1], [1, 1]
-                            ]
-                        ];
-        return temp;
-    };
+            [
+                [[-1, 0], [1, -1], [1, 0]] ,
+                [[-1, -1], [0, -1], [0, 1]] ,
+                [[-1, 0], [-1, 1], [1, 0]] ,
+                [[0, -1], [0, 1], [1, 1]]
+            ] ,
 
-    TetrisT =
-    function() {
-        var   temp = new Tile();
-        temp.states =   [   [   [0, -1], [0, 1], [1, 0]
-                            ],
-                            [   [-1, 0], [0, -1], [1, 0]
-                            ],
-                            [   [-1, 0], [0, -1], [0, 1]
-                            ],
-                            [   [-1, 0], [0, 1], [1, 0]
-                            ]
-                        ];
-        return temp;
-    };
+            [
+                [[0, -1], [0, 1], [1, 0]] ,
+                [[-1, 0], [0, -1], [1, 0]] ,
+                [[-1, 0], [0, -1], [0, 1]] ,
+                [[-1, 0], [0, 1], [1, 0]]
+            ]
+        ] ,
 
-    Cyclotropic.tetris =
-    {
-        board: [ [false, false, false, false, false, false, false, false, false, false] 
-	        ,[false, false, false, false, false, false, false, false, false, false] 
-		,[false, false, false, false, false, false, false, false, false, false] 
-	        ,[false, false, false, false, false, false, false, false, false, false] 
-	        ,[false, false, false, false, false, false, false, false, false, false] 
-	        ,[false, false, false, false, false, false, false, false, false, false] 
-	        ,[false, false, false, false, false, false, false, false, false, false] 
-	        ,[false, false, false, false, false, false, false, false, false, false] 
-	        ,[false, false, false, false, false, false, false, false, false, false] 
-	        ,[false, false, false, false, false, false, false, false, false, false] 
-	        ,[false, false, false, false, false, false, false, false, false, false] 
-	        ,[false, false, false, false, false, false, false, false, false, false] 
-	        ,[false, false, false, false, false, false, false, false, false, false] 
-	        ,[false, false, false, false, false, false, false, false, false, false] 
-	        ,[false, false, false, false, false, false, false, false, false, false] 
-	        ,[false, false, false, false, false, false, false, false, false, false] 
-	        ,[false, false, false, false, false, false, false, false, false, false] 
-	        ,[false, false, false, false, false, false, false, false, false, false] 
-	        ,[false, false, false, false, false, false, false, false, false, false] 
-	        ,[false, false, false, false, false, false, false, false, false, false] 
-               ]
-	,
+        current_tetromino : null ,
 
-        falling_piece: { row: 20
-	               , column: 5
-		       , tile: null
-		       }
-	,
-
-	next_piece: null,
-
+        next_tetronimo : function () {
+            var which_piece = Math.floor( 7 * Math.random() );
+            return tetrominoes[which_piece];
+        }
     }
-
-});
+}
