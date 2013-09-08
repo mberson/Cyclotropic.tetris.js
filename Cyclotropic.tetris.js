@@ -24,58 +24,60 @@ Tetris = {
         [false, false, false, false, false, false, false, false, false, false]
     ] ,
 
-    falling_piece : {
-        tetrominoes : [
-            // Since I have the player's cursor as an origin, it only takes three Cartesian
-            // points to represent a tetromino. Most shapes will actually store several
-            // triplets - pre-computed rotations.
+    tetrominoes : [
+        // Since I have the player's cursor as an origin, it only takes three Cartesian
+        // points to represent a tetromino. Most shapes will actually store several
+        // triplets - pre-computed rotations.
 
-            [
-                [[0, 1], [1, 0], [1, 1]] ,
-            ] ,
-
-            [
-                [[-1, 0], [1, 0], [2, 0]] ,
-                [[0, -1], [0, 1], [0, 2]] ,
-            ] ,
-
-            [
-                [[-1, 1], [0, 1], [1, 0]] ,
-                [[0, -1], [1, 0], [1, 1]]
-            ] ,
-
-            [
-                [[-1, -1], [0, -1], [1, 0]] ,
-                [[0, 1], [1, -1], [1, 0]]
-            ] ,
-
-            [
-                [[-1, 0], [1, 0], [1, 1]] ,
-                [[0, -1], [0, 1], [1, -1]] ,
-                [[-1, -1], [-1, 0], [1, 0]] ,
-                [[-1, 1], [0, -1], [0, 1]]
-            ] ,
-
-            [
-                [[-1, 0], [1, -1], [1, 0]] ,
-                [[-1, -1], [0, -1], [0, 1]] ,
-                [[-1, 0], [-1, 1], [1, 0]] ,
-                [[0, -1], [0, 1], [1, 1]]
-            ] ,
-
-            [
-                [[0, -1], [0, 1], [1, 0]] ,
-                [[-1, 0], [0, -1], [1, 0]] ,
-                [[-1, 0], [0, -1], [0, 1]] ,
-                [[-1, 0], [0, 1], [1, 0]]
-            ]
+        [
+            [[0, 1], [1, 0], [1, 1]] ,
         ] ,
 
-        current_tetromino : null ,
+        [
+            [[-1, 0], [1, 0], [2, 0]] ,
+            [[0, -1], [0, 1], [0, 2]] ,
+        ] ,
 
-        next_tetronimo : function () {
-            var which_piece = Math.floor( 7 * Math.random() );
-            return tetrominoes[which_piece];
+        [
+            [[-1, 1], [0, 1], [1, 0]] ,
+            [[0, -1], [1, 0], [1, 1]]
+        ] ,
+
+        [
+            [[-1, -1], [0, -1], [1, 0]] ,
+            [[0, 1], [1, -1], [1, 0]]
+        ] ,
+
+        [
+            [[-1, 0], [1, 0], [1, 1]] ,
+            [[0, -1], [0, 1], [1, -1]] ,
+            [[-1, -1], [-1, 0], [1, 0]] ,
+            [[-1, 1], [0, -1], [0, 1]]
+        ] ,
+
+        [
+            [[-1, 0], [1, -1], [1, 0]] ,
+            [[-1, -1], [0, -1], [0, 1]] ,
+            [[-1, 0], [-1, 1], [1, 0]] ,
+            [[0, -1], [0, 1], [1, 1]]
+        ] ,
+
+        [
+            [[0, -1], [0, 1], [1, 0]] ,
+            [[-1, 0], [0, -1], [1, 0]] ,
+            [[-1, 0], [0, -1], [0, 1]] ,
+            [[-1, 0], [0, 1], [1, 0]]
+        ]
+    ] ,
+
+    cursor : [0, 5] ,
+
+    falling_piece : {
+        current_tetromino: null ,
+        next_tetromino: null ,
+        new_tetromino: function () {
+            var i = Math.floor( 7 * Math.random() );
+            return tetrominoes[i];
         }
     }
 }
